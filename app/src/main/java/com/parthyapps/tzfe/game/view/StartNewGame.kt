@@ -1,10 +1,11 @@
 package com.parthyapps.tzfe.game.view
 
-import com.parthyapps.tzfe.game.gameLogic.GameFunctionProtocol
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.parthyapps.tzfe.game.gameLogic.GameFunctionality
 import java.util.*
 
-class StartNewGame(delegated: GameFunctionProtocol) : GameFunctionality(delegate = delegated) {
+class StartNewGame(delegated: GameMainActivity) : GameFunctionality(delegate = delegated) {
 
     lateinit var startedPlaying: Date
         private set
@@ -16,6 +17,7 @@ class StartNewGame(delegated: GameFunctionProtocol) : GameFunctionality(delegate
         this.startLastGame = this.startedPlaying
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun newGame(newHighScore: Int) {
         super.newGame(newHighScore)
         this.startLastGame = Date()

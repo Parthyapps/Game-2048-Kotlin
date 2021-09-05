@@ -20,5 +20,8 @@ class Constants {
         const val BOARD_CORNER_RADIUS = 2.0
         const val TILE_CORNER_RADIUS = 5
 
+        // Random tile selection ratio
+        const val RANDOM_RATIO = 70  // favours '2's over '4's by ~3.5:1 ~70%
+
     }
 }
