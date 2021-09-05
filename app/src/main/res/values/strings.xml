@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">2048 GAME</string>
+    <string name="app_name">GAME 2048</string>
     <string name="score">Score: </string>
     <string name="best_score">Best</string>
     <string name="winner_toast_message">W I N N E R! </string>

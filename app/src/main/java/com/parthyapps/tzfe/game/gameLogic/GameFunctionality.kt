@@ -3,7 +3,6 @@ package com.parthyapps.tzfe.game.gameLogic
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.parthyapps.tzfe.game.utils.Constants
-import com.parthyapps.tzfe.game.view.GameMainActivity
 import java.io.Serializable
 import java.util.*
 import kotlin.collections.ArrayList
@@ -23,7 +22,7 @@ enum class GameMoves { Up, Down, Left, Right }
 // Allowable tile movement sequences
 enum class TileMoveType { Add, Slide, Merge, Clear, Reset }
 
-open class GameFunctionality(private var delegate: GameMainActivity) : Serializable {
+open class GameFunctionality(private var delegate: GameFunctionProtocol) : Serializable {
 
     private val gridCount = Constants.TILE_CNT
     private val rowCnt = Constants.DIMENSION
@@ -81,20 +80,9 @@ open class GameFunctionality(private var delegate: GameMainActivity) : Serializa
 
     // Create and return a current game board status record object
     private fun getGameBoardRecord(): GameBoardRecord {
-        return GameBoardRecord(tiles, score, numEmpty, gameOver, maxTile)
+        return GameBoardRecord(gameOver, maxTile)
     }
-
-    fun achievedTarget(): Boolean {
-        return (maxTile >= Constants.WIN_TARGET)
-    }
-
-    fun getTileValue(at: Int): Int {
-        if (at in 0 until gridCount) {
-            return tiles[at]
-        }
-        return 0
-    }
-
+    
     private fun addNewTile(seedValue: Int = -1): Boolean {
         if (numEmpty == 0) {
             return false
@@ -305,7 +293,6 @@ open class GameFunctionality(private var delegate: GameMainActivity) : Serializa
     }
 
     // THIS FUNCTION IS THE MAIN CONTROLLER FOR GAME MOVES
-    // THIS FUNCTION IS THE MAIN CONTROLLER FOR GAME MOVES
     @RequiresApi(Build.VERSION_CODES.M)
     fun actionMove(move: GameMoves): Boolean {
 
@@ -362,33 +349,6 @@ open class GameFunctionality(private var delegate: GameMainActivity) : Serializa
         }
     }
 
-    // Regress state and move sequences back to previous
-    @RequiresApi(Build.VERSION_CODES.M)
-    fun goBackOneMove(): Boolean {
-        if (this.previousMoves.size > 1) {
-            val pm = this.previousMoves[1]
-            this.tiles = pm.tiles
-            this.score = pm.score
-            this.numEmpty = pm.numEmpty
-            this.gameOver = pm.gameOver
-            this.maxTile = pm.maxTile
-            this.previousMoves.removeAt(0)
-            this.replotBoard() // redraw and create transitions for re-rendering the board.
-            return true
-        }
-        return false
-    }
-
-    fun asString(): String {
-        var str = "---------\n"
-        str += "|$tiles[0]|$tiles[4]|$tiles[8]|$tiles[12]|\n"
-        str += "|$tiles[1]|$tiles[5]|$tiles[9]|$tiles[13]|\n"
-        str += "|$tiles[2]|$tiles[6]|$tiles[10]|$tiles[14]|\n"
-        str += "|$tiles[3]|$tiles[7]|$tiles[11]|$tiles[15]|\n"
-        str += "---------"
-        return (str)
-    }
-
     // Tile movement instructions record for the game board renderer
     class Transition(
         var action: TileMoveType,
@@ -399,9 +359,6 @@ open class GameFunctionality(private var delegate: GameMainActivity) : Serializa
 
     // Snapshot Object containing the status of previous game moves
     class GameBoardRecord(
-        var tiles: ArrayList<Int>,
-        var score: Int,
-        var numEmpty: Int,
         var gameOver: Boolean,
         var maxTile: Int
     ) : Serializable

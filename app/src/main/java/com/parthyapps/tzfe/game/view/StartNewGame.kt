@@ -2,10 +2,11 @@ package com.parthyapps.tzfe.game.view
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.parthyapps.tzfe.game.gameLogic.GameFunctionProtocol
 import com.parthyapps.tzfe.game.gameLogic.GameFunctionality
 import java.util.*
 
-class StartNewGame(delegated: GameMainActivity) : GameFunctionality(delegate = delegated) {
+class StartNewGame(delegated: GameFunctionProtocol) : GameFunctionality(delegate = delegated) {
 
     lateinit var startedPlaying: Date
         private set
@@ -23,6 +24,4 @@ class StartNewGame(delegated: GameMainActivity) : GameFunctionality(delegate = d
         this.startLastGame = Date()
     }
 
-    fun getTotalTimePlaying() = (Date().time - startedPlaying.time)
-    fun getTimePlayingCurrent() = (Date().time - startLastGame.time)
 }

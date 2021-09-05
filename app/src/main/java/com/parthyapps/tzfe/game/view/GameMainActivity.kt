@@ -2,7 +2,6 @@ package com.parthyapps.tzfe.game.view
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
@@ -12,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.parthyapps.tzfe.game.R
 import com.parthyapps.tzfe.game.databinding.ActivityGameMainBinding
 import com.parthyapps.tzfe.game.gameLogic.GameFunctionality
+import com.parthyapps.tzfe.game.gameLogic.GameFunctionProtocol
 import com.parthyapps.tzfe.game.gameLogic.GameMoves
 import com.parthyapps.tzfe.game.gameLogic.StoredGameData
 import com.parthyapps.tzfe.game.gameLogic.TileMoveType
 
-class GameMainActivity : AppCompatActivity() {
+class GameMainActivity : AppCompatActivity(), GameFunctionProtocol {
 
     private lateinit var activityGameMainBinding: ActivityGameMainBinding
 
@@ -66,13 +66,11 @@ class GameMainActivity : AppCompatActivity() {
         }
 
         activityGameMainBinding.resetButton.setOnClickListener {
-            Log.i("Logm", "Inside on click main activity action method")
             this.setupNewGame()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Log.i("Logm", "Inside onSaveInstanceState method")
         outState.putSerializable(GAME_KEY, game)
         super.onSaveInstanceState(outState)
     }
@@ -80,7 +78,6 @@ class GameMainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        Log.i("Logm", "Inside onRestoreInstanceState method")
         val tmpGame: StartNewGame? =
             savedInstanceState.getSerializable(GAME_KEY) as StartNewGame?
         if (tmpGame != null) {
@@ -94,7 +91,6 @@ class GameMainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     private fun setupNewGame() {
         this.highScore = dataStore.getHighScore()
-        //this.gamePanel.resetBoard()
         game.newGame(this.highScore)
         this.userScoreChanged(0)
     }
@@ -135,7 +131,6 @@ class GameMainActivity : AppCompatActivity() {
         val tv = findViewById<TextView>(cells[move.location])
         //val tv = cells[move.location]
         if (move.action == TileMoveType.Slide || move.action == TileMoveType.Merge) {
-            //Log.i("Logm", "About to do paint compact w=$w h=$h t=$t")
             paintCell(tv, move.value)
             this.paintTransition(
                 GameFunctionality.Transition(
@@ -192,21 +187,21 @@ class GameMainActivity : AppCompatActivity() {
         tv.setTextColor(txCol)
     }
 
-    fun userWin() {
+    override fun userWin() {
         Toast.makeText(
             this, resources.getString(R.string.winner_toast_message) +
                     game.maxTile, Toast.LENGTH_LONG
         ).show()
     }
 
-    fun userFail() {
+    override fun userFail() {
         Toast.makeText(
             this, resources.getString(R.string.lose_toast_message),
             Toast.LENGTH_LONG
         ).show()
     }
 
-    fun userPB(score: Int) {
+    override fun userPB(score: Int) {
         Toast.makeText(
             this, resources.getString(R.string.personalbest_toast_message),
             Toast.LENGTH_SHORT
@@ -215,16 +210,15 @@ class GameMainActivity : AppCompatActivity() {
         this.highScore = score
     }
 
-    fun userScoreChanged(score: Int) {
+    override fun userScoreChanged(score: Int) {
         activityGameMainBinding.score.text =
             StringBuffer(resources.getString(R.string.score)).append(score)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun updateTileValue(move: GameFunctionality.Transition) {
+    override fun updateTileValue(move: GameFunctionality.Transition) {
         paintTransition(move)
     }
-
 
     companion object {
         private const val GAME_KEY = "2048_GAME_KEY"
