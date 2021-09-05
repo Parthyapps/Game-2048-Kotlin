@@ -10,6 +10,7 @@ import com.parthyapps.tzfe.game.databinding.ActivitySplashBinding
 import com.parthyapps.tzfe.game.view.GameMainActivity
 
 class SplashScreen : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val activitySplashBinding = ActivitySplashBinding.inflate(layoutInflater)
