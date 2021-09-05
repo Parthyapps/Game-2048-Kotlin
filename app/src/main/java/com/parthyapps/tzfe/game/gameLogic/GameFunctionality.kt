@@ -82,7 +82,7 @@ open class GameFunctionality(private var delegate: GameFunctionProtocol) : Seria
     private fun getGameBoardRecord(): GameBoardRecord {
         return GameBoardRecord(gameOver, maxTile)
     }
-    
+
     private fun addNewTile(seedValue: Int = -1): Boolean {
         if (numEmpty == 0) {
             return false
