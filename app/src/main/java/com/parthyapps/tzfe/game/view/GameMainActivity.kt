@@ -13,6 +13,7 @@ class GameMainActivity : AppCompatActivity() {
     private var highScore: Int = 0
     private var x1 = 0f
     private var y1 = 0f
+    private lateinit var game: StartNewGame
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,5 +35,22 @@ class GameMainActivity : AppCompatActivity() {
         cells[13] = R.id.index13
         cells[14] = R.id.index14
         cells[15] = R.id.index15
+
+        if (savedInstanceState != null) {
+            val tmpGame: StartNewGame? =
+                savedInstanceState.getSerializable(GAME_KEY) as StartNewGame?
+            if (tmpGame != null) {
+                game = tmpGame
+                game.replotBoard()
+            }
+        } else {
+            game = StartNewGame(this)
+            this.setupNewGame()
+        }
     }
+
+    companion object {
+        private const val GAME_KEY = "2048_GAME_KEY"
+    }
+
 }
