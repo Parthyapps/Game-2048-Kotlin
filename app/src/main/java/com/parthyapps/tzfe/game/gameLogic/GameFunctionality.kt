@@ -11,7 +11,13 @@ interface GameFunctionProtocol {
     fun userScoreChanged(score: Int)
 }
 
-open class GameFunctionality (private var delegate: GameFunctionProtocol) : Serializable {
+// Allowable game moves
+enum class GameMoves { Up, Down, Left, Right }
+
+// Allowable tile movement sequences
+enum class TileMoveType { Add, Slide, Merge, Clear, Reset }
+
+open class GameFunctionality(private var delegate: GameFunctionProtocol) : Serializable {
 
     private val gridCount = Constants.TILE_CNT
     private val rowCnt = Constants.DIMENSION
