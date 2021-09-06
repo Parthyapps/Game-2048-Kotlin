@@ -1,4 +1,4 @@
-# Game - 2048
+# Game - 2048 Kotlin
 2048 Game using Android Kotlin and ViewBinding
 
 2048 is played on a 4×4 grid, with numbered tiles that slide when a player moves them using directional input matching [ Up, Down, Left, Right ]. 
